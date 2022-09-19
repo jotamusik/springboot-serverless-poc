@@ -1,0 +1,35 @@
+service: spring-boot-serverless
+
+provider:
+  name: aws
+  runtime: java11
+  region: eu-west-2
+  stage: ${opt:stage, 'dev'}
+
+package:
+  artifact: target/springboot-serverless-1.0-SNAPSHOT-lambda-package.zip
+
+functions:
+  health:
+    handler: org.example.StreamLambdaHandler::handleRequest
+    events:
+      - http:
+          path: ping
+          method: get
+          cors: true
+
+  getNoteById:
+    handler: org.example.StreamLambdaHandler::handleRequest
+    events:
+      - http:
+          path: notes/{id}
+          method: get
+          cors: true
+
+  getAllNotes:
+    handler: org.example.StreamLambdaHandler::handleRequest
+    events:
+      - http:
+          path: notes
+          method: get
+          cors: true
